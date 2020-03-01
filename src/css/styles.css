@@ -1,0 +1,14 @@
+body {
+    background-color: lightgray;
+}
+
+h1 {
+    font-family: 'Lacquer';
+    text-align: center;
+}
+
+canvas {
+    border: 5px solid indigo;
+    display: block;
+    margin: 0 auto;
+}

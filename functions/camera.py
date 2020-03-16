@@ -39,17 +39,21 @@ class Camera:
 
     def process_keyboard(self, direction, velocity, run=0):
         if direction == 'FORWARD':
-            self.camera_pos += self.camera_front * velocity
-            self.camera_pos[1] = 4.0
+            self.camera_pos[0] += self.camera_front[0] * velocity
+            self.camera_pos[2] += self.camera_front[2] * velocity
+
         if direction == 'BACKWARD':
-            self.camera_pos -= self.camera_front * velocity
-            self.camera_pos[1] = 4.0
+            self.camera_pos[0] -= self.camera_front[0] * velocity
+            self.camera_pos[2] -= self.camera_front[2] * velocity
+
         if direction == 'LEFT':
-            self.camera_pos -= self.camera_right * velocity
-            self.camera_pos[1] = 4.0
+            self.camera_pos[0] -= self.camera_right[0] * velocity
+            self.camera_pos[2] -= self.camera_right[2] * velocity
+
         if direction == 'RIGHT':
-            self.camera_pos += self.camera_right * velocity
-            self.camera_pos[1] = 4.0
+            self.camera_pos[0] += self.camera_right[0] * velocity
+            self.camera_pos[2] += self.camera_right[2] * velocity
+
 
     def update_camera_vectors(self):
 

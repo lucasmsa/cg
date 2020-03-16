@@ -12,5 +12,4 @@ from texturesLoader import textureLoader
 from windowsResize import windowResize
 from objsloader import Object_Loader
 from camera import Camera
-#from keyInputCallback import key_input_callback
-#from mouseOperations import mouse_look_callback, mouse_enter_callback
+from createsObject import createObject

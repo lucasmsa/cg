@@ -127,38 +127,10 @@ try:
     # * subsequent vertex attribute calls will be stored inside
     # * this VAO object
     VBO = glGenBuffers(2)
-        
-    #EBO = glGenBuffers(2)
-
-    glBindVertexArray(VAO[0])
-    # * these steps will be repeated throughout the creating of new objects
-    # * Vertex buffer object
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[0])
-    glBufferData(GL_ARRAY_BUFFER, car_buffer.nbytes, car_buffer, GL_STATIC_DRAW)
     
-    # * for the position
-    glEnableVertexAttribArray(0)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, car_buffer.itemsize * 8, ctypes.c_void_p(0))
-    # * for texture coordinates
-    glEnableVertexAttribArray(1)
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, car_buffer.itemsize * 8, ctypes.c_void_p(12))
-    # * for normal coordinates
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, car_buffer.itemsize * 8, ctypes.c_void_p(20))
-    glEnableVertexAttribArray(2)
-
-    glBindVertexArray(VAO[1])
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[1])
-    glBufferData(GL_ARRAY_BUFFER, floor_buffer.nbytes, floor_buffer, GL_STATIC_DRAW)
-   
-    # * for the position
-    glEnableVertexAttribArray(0)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, floor_buffer.itemsize * 8, ctypes.c_void_p(0))
-    # * for texture coordinates
-    glEnableVertexAttribArray(1)
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, floor_buffer.itemsize * 8, ctypes.c_void_p(12))
-    # * for normal coordinates
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, floor_buffer.itemsize * 8, ctypes.c_void_p(20))
-    glEnableVertexAttribArray(2)
+    # * Function created, located at functions/createsObject
+    createObject(VAO, VBO, 0, car_buffer)
+    createObject(VAO, VBO, 1, floor_buffer)
 
     # * if the parameter is more than one it will generate an array 
     # * with slots of texture

@@ -1,0 +1,28 @@
+# Blender MTL File: 'Lowpoly_Notebook_2.blend'
+# Material Count: 2
+
+newmtl Lowpoly_Body
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd F:\Privat\001_Cgtrader\Lowpoly_Notebook\textures\Lowpolay_Laptop_col.JPG
+map_Bump  F:\\Privat\\001_Cgtrader\\Lowpoly_Notebook\\textures\\Lowpolay_Laptop_nor.JPG
+refl  F:\\Privat\\001_Cgtrader\\Lowpoly_Notebook\\textures\\Ref.jpg
+
+newmtl Lowpoly_Screen
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd F:\Privat\001_Cgtrader\Lowpoly_Notebook\textures\Lowpolay_Laptop_nor_2.JPG
+map_Bump  F:\\Privat\\001_Cgtrader\\Lowpoly_Notebook\\textures\\Lowpolay_Laptop_nor_2.JPG
+refl  F:\\Privat\\001_Cgtrader\\Lowpoly_Notebook\\textures\\Ref.jpg

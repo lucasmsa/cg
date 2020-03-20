@@ -60,9 +60,9 @@ def move():
         cam.process_keyboard('BACKWARD', 0.25, run)
 
     if jump:
-        cam.process_jump(0.05)
+        cam.process_jump(0.2)
     else:
-        cam.process_back_jump(0.05)
+        cam.process_back_jump(0.2)
 
     if crouch:
         cam.process_crouch(crouch)

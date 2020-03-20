@@ -48,16 +48,16 @@ def key_input_callback(window, key, scancode, action, mode):
 def move(): 
   
     if left:
-        cam.process_keyboard('LEFT', 0.05, run)
+        cam.process_keyboard('LEFT', 0.025, run)
 
     if right:
-        cam.process_keyboard('RIGHT', 0.05, run)
+        cam.process_keyboard('RIGHT', 0.025, run)
 
     if forward:
-        cam.process_keyboard('FORWARD', 0.05, run)
+        cam.process_keyboard('FORWARD', 0.025, run)
 
     if backward:
-        cam.process_keyboard('BACKWARD', 0.05, run)
+        cam.process_keyboard('BACKWARD', 0.025, run)
 
     if jump:
         cam.process_jump(jump, 0.05)

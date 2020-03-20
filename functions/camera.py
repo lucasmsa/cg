@@ -39,6 +39,10 @@ class Camera:
         self.update_camera_vectors()
 
     def process_keyboard(self, direction, velocity, run=0):
+
+        if run:
+            velocity += 0.1
+        
         if direction == 'FORWARD':
             self.camera_pos[0] += self.camera_front[0] * velocity
             self.camera_pos[2] += self.camera_front[2] * velocity
@@ -88,13 +92,12 @@ class Camera:
         #    self.camera_pos[1] -= self.camera_up[1] * 4
 
 
-            
-
     def process_crouch(self, crouching):
         if crouching:
             self.camera_pos[1] = self.camera_up[1] * 2.5
         else:
             self.camera_pos[1] = self.camera_up[1] * 4
+
 
     def update_camera_vectors(self):
 

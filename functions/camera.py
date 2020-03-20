@@ -1,5 +1,6 @@
 from math import sin, cos, radians
 import pyrr
+import time
 
 class Camera:
     def __init__(self):
@@ -53,7 +54,47 @@ class Camera:
         if direction == 'RIGHT':
             self.camera_pos[0] += self.camera_right[0] * velocity
             self.camera_pos[2] += self.camera_right[2] * velocity
+    
+    def process_jump(self, jumping, velocity):
+        if jumping and self.camera_pos[1] < self.camera_up[1] * 12:
+            self.camera_pos[1] += self.camera_up[1] * velocity
+            
+        # elif jumping and self.camera_pos[1] >= self.camera_up[1] * 12:
+        #     self.camera_pos[1] = self.camera_up[1] * 12
 
+    def process_back_jump(self, jumping, velocity):
+        if not jumping and self.camera_pos[1] > self.camera_up[1] * 4:
+            self.camera_pos[1] -= self.camera_up[1] * velocity
+        # elif not jumping and self.camera_pos[1] <= self.camera_up[1] * 4:
+        #     self.camera_pos[1] = self.camera_up[1] * 4
+
+
+        # if jumping and jump_ant:
+        #     jump_ant != jumping
+        #     print(jump_ant)
+        #     self.camera_pos[1] += self.camera_up[1] * velocity
+            
+        # elif jump_ant != jumping:
+        #     self.camera_pos[1] -= self.camera_up[1] * velocity
+        #     if self.camera_pos[1] <= self.camera_up[1] * 4:
+        #         self.camera_pos[1] = self.camera_up[1] * 4
+
+        # if jumping and self.camera_pos[1] <= self.camera_up[1] * 8:
+        #     self.camera_pos[1] += self.camera_up[1] * velocity
+
+        #elif jumping and self.camera_pos[1] >= self.camera_up[1] * 4:
+         #   self.camera_pos[1] -= self.camera_up[1] * velocity
+        #elif jumping and self.camera_pos[1] == self.camera_up[1] * 4:
+        #    self.camera_pos[1] -= self.camera_up[1] * 4
+
+
+            
+
+    def process_crouch(self, crouching):
+        if crouching:
+            self.camera_pos[1] = self.camera_up[1] * 2.5
+        else:
+            self.camera_pos[1] = self.camera_up[1] * 4
 
     def update_camera_vectors(self):
 

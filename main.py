@@ -48,19 +48,21 @@ def key_input_callback(window, key, scancode, action, mode):
 def move(): 
   
     if left:
-        cam.process_keyboard('LEFT', 0.025, run)
+        cam.process_keyboard('LEFT', 0.25, run)
 
     if right:
-        cam.process_keyboard('RIGHT', 0.025, run)
+        cam.process_keyboard('RIGHT', 0.25, run)
 
     if forward:
-        cam.process_keyboard('FORWARD', 0.025, run)
+        cam.process_keyboard('FORWARD', 0.25, run)
 
     if backward:
-        cam.process_keyboard('BACKWARD', 0.025, run)
+        cam.process_keyboard('BACKWARD', 0.25, run)
 
     if jump:
-        cam.process_jump(jump, 0.05)
+        cam.process_jump(0.05)
+    else:
+        cam.process_back_jump(0.05)
 
     if crouch:
         cam.process_crouch(crouch)
@@ -166,8 +168,6 @@ try:
     while not glfw.window_should_close(window):
         glfw.poll_events()
         move()
-
-        cam.process_back_jump(jump, 0.5)
 
         # * calls glClearColor
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)

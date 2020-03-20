@@ -15,27 +15,15 @@ def key_input_callback(window, key, scancode, action, mode):
 
     if key == glfw.KEY_W and action == glfw.PRESS:
         forward = True
-        
-        if key == glfw.KEY_LEFT_SHIFT and action == glfw.PRESS:
-            run = True
 
     if key == glfw.KEY_S and action == glfw.PRESS:
         backward = True
 
-        if key == glfw.KEY_LEFT_SHIFT and action == glfw.PRESS:
-            run = True
-    
     if key == glfw.KEY_A and action == glfw.PRESS:
         left = True
 
-        if key == glfw.KEY_LEFT_SHIFT and action == glfw.PRESS:
-            run = True
-
     if key == glfw.KEY_D and action == glfw.PRESS:
         right = True
-
-        if key == glfw.KEY_LEFT_SHIFT and action == glfw.PRESS:
-            run = True
 
     if key == glfw.KEY_SPACE and action == glfw.PRESS:
         jump = True
@@ -43,6 +31,9 @@ def key_input_callback(window, key, scancode, action, mode):
     if key == glfw.KEY_LEFT_CONTROL and action == glfw.PRESS:
         crouch = True
     
+    if key == glfw.KEY_LEFT_SHIFT and action == glfw.PRESS:
+        run = True
+
     # * if the key is released then it will reset the variables 
     # * related to the keys to False
     if key in [glfw.KEY_A, glfw.KEY_S, glfw.KEY_D, glfw.KEY_W, glfw.KEY_LEFT_SHIFT, glfw.KEY_SPACE, glfw.KEY_LEFT_CONTROL] and action == glfw.RELEASE:
@@ -54,31 +45,22 @@ def key_input_callback(window, key, scancode, action, mode):
             cam.process_crouch(crouch)
 
 
-
-
-def move():
+def move(): 
+  
     if left:
-        cam.process_keyboard('LEFT', 0.25)
-        if run:
-            cam.process_keyboard('LEFT', 0.5)
+        cam.process_keyboard('LEFT', 0.05, run)
 
     if right:
-        cam.process_keyboard('RIGHT', 0.25)
-        if run:
-            cam.process_keyboard('RIGHT', 0.5)
+        cam.process_keyboard('RIGHT', 0.05, run)
 
     if forward:
-        cam.process_keyboard('FORWARD', 0.25)
-        if run:
-            cam.process_keyboard('FORWARD', 0.5)
+        cam.process_keyboard('FORWARD', 0.05, run)
 
     if backward:
-        cam.process_keyboard('BACKWARD', 0.25)
-        if run:
-            cam.process_keyboard('BACKWARD', 0.5)
+        cam.process_keyboard('BACKWARD', 0.05, run)
 
     if jump:
-        cam.process_jump(jump, 0.5)
+        cam.process_jump(jump, 0.05)
 
     if crouch:
         cam.process_crouch(crouch)

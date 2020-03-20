@@ -4,11 +4,11 @@ cam = Camera()
 width, height = 1280, 720
 lastX, lastY = width/2, height/2
 first_mouse = True
-left, right, forward, backward, run = False, False, False, False, False
+left, right, forward, backward, run, jump, crouch = False, False, False, False, False, False ,False
 
 def key_input_callback(window, key, scancode, action, mode):
     
-    global left, right, forward, backward, run
+    global left, right, forward, backward, run, jump, crouch
 
     if key == glfw.KEY_ESCAPE and action == glfw.PRESS:
         glfw.set_window_should_close(window, True)
@@ -36,34 +36,52 @@ def key_input_callback(window, key, scancode, action, mode):
 
         if key == glfw.KEY_LEFT_SHIFT and action == glfw.PRESS:
             run = True
+
+    if key == glfw.KEY_SPACE and action == glfw.PRESS:
+        jump = True
+
+    if key == glfw.KEY_LEFT_CONTROL and action == glfw.PRESS:
+        crouch = True
     
     # * if the key is released then it will reset the variables 
     # * related to the keys to False
-    if key in [glfw.KEY_A, glfw.KEY_S, glfw.KEY_D, glfw.KEY_W, glfw.KEY_LEFT_SHIFT] and action == glfw.RELEASE:
+    if key in [glfw.KEY_A, glfw.KEY_S, glfw.KEY_D, glfw.KEY_W, glfw.KEY_LEFT_SHIFT, glfw.KEY_SPACE, glfw.KEY_LEFT_CONTROL] and action == glfw.RELEASE:
         
-        left, right, forward, backward, run = False, False, False, False, False
+        left, right, forward, backward, run, jump = False, False, False, False, False, False
+
+        if crouch:
+            crouch = False
+            cam.process_crouch(crouch)
+
+
 
 
 def move():
     if left:
-        cam.process_keyboard('LEFT', 0.025)
+        cam.process_keyboard('LEFT', 0.25)
         if run:
-            cam.process_keyboard('LEFT', 0.1)
+            cam.process_keyboard('LEFT', 0.5)
 
     if right:
-        cam.process_keyboard('RIGHT', 0.025)
+        cam.process_keyboard('RIGHT', 0.25)
         if run:
-            cam.process_keyboard('RIGHT', 0.1)
+            cam.process_keyboard('RIGHT', 0.5)
 
     if forward:
-        cam.process_keyboard('FORWARD', 0.025)
+        cam.process_keyboard('FORWARD', 0.25)
         if run:
-            cam.process_keyboard('FORWARD', 0.1)
+            cam.process_keyboard('FORWARD', 0.5)
 
     if backward:
-        cam.process_keyboard('BACKWARD', 0.025)
+        cam.process_keyboard('BACKWARD', 0.25)
         if run:
-            cam.process_keyboard('BACKWARD', 0.1)
+            cam.process_keyboard('BACKWARD', 0.5)
+
+    if jump:
+        cam.process_jump(jump, 0.5)
+
+    if crouch:
+        cam.process_crouch(crouch)
 
 def mouse_look_callback(window, xpos, ypos):
 
@@ -167,6 +185,8 @@ try:
         glfw.poll_events()
         move()
 
+        cam.process_back_jump(jump, 0.5)
+
         # * calls glClearColor
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
 
@@ -177,6 +197,7 @@ try:
         rot_x = pyrr.Matrix44.from_x_rotation(0.7 * glfw.get_time())
         rot_y = pyrr.Matrix44.from_y_rotation(0.6 * glfw.get_time())
         
+
         # * this model holds the combined matrices
         # * note that the second model call uses itself as a parameter
         # * it applies all the transformations to the model

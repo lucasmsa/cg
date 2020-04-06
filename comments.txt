@@ -130,3 +130,34 @@
     #view = pyrr.matrix44.create_look_at(pyrr.Vector3([0, 2, 16]),
     #pyrr.Vector3([0, 0, 0]), pyrr.Vector3([0, 1, 0]))
     
+    
+def drawHud(hud_texture):
+    
+    glMatrixMode(GL_PROJECTION)
+    glPushMatrix()
+    glLoadIdentity()
+    gluOrtho2D(0.0, 1.0, 1.0, 0.0)
+    glMatrixMode(GL_MODELVIEW)
+    glPushMatrix()
+    glLoadIdentity()
+    hud(hud_texture)
+
+    glMatrixMode(GL_PROJECTION)
+    glPopMatrix()
+    glMatrixMode(GL_MODELVIEW)
+    glPopMatrix()
+
+def hud(hud_texture):
+
+    glBindTexture(GL_TEXTURE_2D, hud_texture)
+    glColor3f(1.0, 1.0, 1.0)
+    glBegin(GL_QUADS)
+    glTexCoord2f(0.0, 1.0)
+    glVertex2f(0.05, 0.05)
+    glTexCoord2f(1.0, 1.0)
+    glVertex2f(0.3, 0.05)
+    glTexCoord2f(1.0, 0.0)
+    glVertex2f(0.3, 0.15)
+    glTexCoord2f(0.0, 0.0)
+    glVertex2f(0.05, 0.15)
+    glEnd()

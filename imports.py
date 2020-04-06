@@ -3,6 +3,8 @@ import numpy as np
 from OpenGL.GL import *
 import pyrr
 from OpenGL.GL.shaders import compileProgram, compileShader
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
 from math import sin, cos, radians
 from PIL import Image
 import sys

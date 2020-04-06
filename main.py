@@ -6,6 +6,7 @@ lastX, lastY = width/2, height/2
 first_mouse = True
 left, right, forward, backward, run, jump, crouch = False, False, False, False, False, False ,False
 
+
 def key_input_callback(window, key, scancode, action, mode):
     
     global left, right, forward, backward, run, jump, crouch
@@ -117,9 +118,21 @@ try:
 
     # * load 3d objects
     car_indices, car_buffer = Object_Loader.load_model('objects/chibi.obj')
-    floor_indices, floor_buffer = Object_Loader.load_model('objects/floor.obj')
+    floor_indices, floor_buffer = Object_Loader.load_model('objects/castle_city.obj')
 
-    
+    # car_texture_offset = len(car_indices)*12
+    # floor_texture_offset = len(floor_indices)*12
+
+    # car_normal_offset = (car_texture_offset + len(car_buffer[2]*8))
+    # floor_normal_offset = (floor_texture_offset + len(floor_buffer[2]*8))
+
+    glMatrixMode(GL_PROJECTION)
+    gluPerspective(45, (width/height), 0.1, 50.0)
+
+    glMatrixMode(GL_MODELVIEW)
+    glTranslatef(0, 0, -5)
+
+    glEnable(GL_DEPTH_TEST) 
     shader = compileProgram(compileShader(vertex_shader, GL_VERTEX_SHADER), 
     compileShader(fragment_shader, GL_FRAGMENT_SHADER))
 
@@ -136,9 +149,9 @@ try:
 
     # * if the parameter is more than one it will generate an array 
     # * with slots of texture
-    textures = glGenTextures(2)
+    textures = glGenTextures(3)
     car_texture = textureLoader('textures/chibi.png', textures[0])
-    floor_texture = textureLoader('textures/floor.jpg', textures[1])
+    floor_texture = textureLoader('textures/terrain colour.png', textures[1])
 
     glUseProgram(shader)
     # * sets window default colors
@@ -159,6 +172,7 @@ try:
     proj_loc = glGetUniformLocation(shader, 'projection')
     view_loc = glGetUniformLocation(shader, 'view')
     switcher_loc = glGetUniformLocation(shader, 'switcher')
+    light_loc = glGetUniformLocation(shader, 'light')
 
     glUniformMatrix4fv(proj_loc, 1, GL_FALSE, projection)
     #glUniformMatrix4fv(view_loc, 1, GL_FALSE, view)
@@ -167,18 +181,16 @@ try:
     # * game loop
     while not glfw.window_should_close(window):
         glfw.poll_events()
+        
         move()
 
         # * calls glClearColor
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-
         view = cam.get_view_matrix()
         glUniformMatrix4fv(view_loc, 1, GL_FALSE, view)
 
-
         rot_x = pyrr.Matrix44.from_x_rotation(0.7 * glfw.get_time())
         rot_y = pyrr.Matrix44.from_y_rotation(0.6 * glfw.get_time())
-        
 
         # * this model holds the combined matrices
         # * note that the second model call uses itself as a parameter
@@ -198,6 +210,7 @@ try:
         glBindTexture(GL_TEXTURE_2D, textures[1])
         glUniformMatrix4fv(model_loc, 1, GL_FALSE, floor_pos)
         glDrawArrays(GL_TRIANGLES, 0, len(floor_indices))
+
 
         glfw.swap_buffers(window)
 

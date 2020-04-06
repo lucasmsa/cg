@@ -43,7 +43,7 @@ class Camera:
     def process_keyboard(self, direction, velocity, run=0):
         
         if run:
-            velocity *= 1.5
+            velocity *= 1.75
         
         if direction == 'FORWARD':
             self.camera_pos[0] += self.camera_front[0] * velocity

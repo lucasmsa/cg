@@ -120,6 +120,12 @@ try:
     floor_indices3, floor_buffer3 = Object_Loader.load_model('objects/amarelo.obj')
     predio_indices, predio_buffer = Object_Loader.load_model('objects/predio2.obj')
     sky_indices, sky_buffer = Object_Loader.load_model('objects/skybox.obj')
+    wall_indices, wall_buffer = Object_Loader.load_model('objects/wall.obj')
+    car1_indices, car1_buffer = Object_Loader.load_model('objects/car1.obj')
+    car2_indices, car2_buffer = Object_Loader.load_model('objects/car2.obj')
+    obstacle_indices, obstacle_buffer = Object_Loader.load_model('objects/obstacle.obj')
+    #engrenagem_indices, engrenagem_buffer = Object_Loader.load_model('objects/engrenagem.obj')
+    
     glMatrixMode(GL_PROJECTION)
     gluPerspective(45, (width/height), 0.1, 50.0)
 
@@ -135,16 +141,20 @@ try:
     VAO = glGenVertexArrays(10)
     # * subsequent vertex attribute calls will be stored inside
     # * this VAO object
-    VBO = glGenBuffers(10)
+    VBO = glGenBuffers(20)
     
     # * Function created, located at functions/createsObject
     createObject(VAO, VBO, 0, car_buffer)
     createObject(VAO, VBO, 1, floor_buffer)
     createObject(VAO, VBO, 2, floor_buffer2)
     createObject(VAO, VBO, 3, floor_buffer3)
-    createObject(VAO, VBO, 4, predio_buffer)
-    createObject(VAO, VBO, 5, sky_buffer)
-    #createObject(VAO, VBO, 7, wall_buffers)
+    createObject(VAO, VBO, 4, sky_buffer)
+    createObject(VAO, VBO, 5, predio_buffer)
+    createObject(VAO, VBO, 6, wall_buffer)
+    createObject(VAO, VBO, 7, car1_buffer)
+    createObject(VAO, VBO, 8, car2_buffer)
+    createObject(VAO, VBO, 9, obstacle_buffer)
+    #createObject(VAO, VBO, 10, engrenagem_buffer)
 
     # * if the parameter is more than one it will generate an array 
     # * with slots of texture
@@ -155,6 +165,12 @@ try:
     floor_texture3 = textureLoader('textures/amarelo.jpg', textures[3])
     predio_texture = textureLoader('textures/predio.png', textures[4])
     sky_texture = textureLoader('textures/skybox_texture.jpg', textures[5])
+    wall_texture = textureLoader('textures/wall.jpg', textures[6])
+    car1_texture = textureLoader('textures/car1.png', textures[7]) #other car
+    car2_texture = textureLoader('textures/car2.png', textures[8]) #Police_Car
+    obstacle_texture = textureLoader('textures/obstacle.jpg', textures[9])
+
+    #engrenagem_texture = textureLoader('textures/asfalto.jpg', textures[10])
 
     glUseProgram(shader)
     # * sets window default colors
@@ -172,23 +188,42 @@ try:
 
     # * creates a perspective projection matrix
     #projection = pyrr.matrix44.create_perspective_projection_matrix(45, width/height, 0.1, 100)
-    projection = pyrr.matrix44.create_perspective_projection_matrix(45, width/height, 0.1, far=600)
+    projection = pyrr.matrix44.create_perspective_projection_matrix(45, width/height, 0.1, far=1000)
+
     x=30
     y=60
+
     car_pos = pyrr.matrix44.create_from_translation(pyrr.Vector3([-4, 0, -5]))
     floor_pos = pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 0, 0]))
     floor_pos2 = pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 0, 0]))
     floor_pos3 = pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 0, 0]))
-    predio_pos = []
-    for i in range(20):
-        if i<10:
-            predio_pos.append(pyrr.matrix44.create_from_translation(pyrr.Vector3([20+(i*x), 0, 0])))
-        else:
-            predio_pos.append(pyrr.matrix44.create_from_translation(pyrr.Vector3([20+((i-10)*x), 0, y])))
-    
     sky_pos = pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 0, 0]))
+    #obstacle_pos = pyrr.matrix44.create_from_translation(pyrr.Vector3([-10, 2.5, 30]))
+    #engrenagem_pos = pyrr.matrix44.create_from_translation(pyrr.Vector3([-15, 0, 30]))
+    predio_pos = []
+    wall_pos = []
+    car1_pos = []
+    car2_pos = []
+    obstacle_pos = []
 
+    for i in range(5):
+        car1_pos.append(pyrr.matrix44.create_from_translation(pyrr.Vector3([20-(i*50), 0, 20])))
+        car2_pos.append(pyrr.matrix44.create_from_translation(pyrr.Vector3([33-(i*50), 0, 20])))
 
+    for i in range(6):
+        if i<5:
+            wall_pos.append(pyrr.matrix44.create_from_translation(pyrr.Vector3([-25, 0, 28-(i*50)])))
+        else:
+            wall_pos.append(pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 0, 0])))
+    
+    for i in range(6):
+        obstacle_pos.append(pyrr.matrix44.create_from_translation(pyrr.Vector3([-7, 2.5, 40-(i*60)])))
+
+    for j in range(3):
+        for i in range(8):
+                predio_pos.append(pyrr.matrix44.create_from_translation(pyrr.Vector3([-140+(i*x), 0, -120+(j*60)])))
+ 
+    sky_pos = pyrr.matrix44.create_from_translation(pyrr.Vector3([0, 0, 0]))
 
     # * these _loc elements will get their values from 
     # * the shaders [fragment shader and vertex shader]
@@ -196,6 +231,7 @@ try:
     proj_loc = glGetUniformLocation(shader, 'projection')
     view_loc = glGetUniformLocation(shader, 'view')
     switcher_loc = glGetUniformLocation(shader, 'switcher')
+    transform_loc = glGetUniformLocation(shader, "transform")
     light_loc = glGetUniformLocation(shader, 'light')
 
     glUniformMatrix4fv(proj_loc, 1, GL_FALSE, projection)
@@ -214,7 +250,7 @@ try:
         glUniformMatrix4fv(view_loc, 1, GL_FALSE, view)
 
         rot_x = pyrr.Matrix44.from_x_rotation(0.7 * glfw.get_time())
-        rot_y = pyrr.Matrix44.from_y_rotation(0.6 * glfw.get_time())
+        rot_y = pyrr.Matrix44.from_y_rotation(0.01 * glfw.get_time())
 
         # * this model holds the combined matrices
         # * note that the second model call uses itself as a parameter
@@ -222,20 +258,19 @@ try:
         model = pyrr.matrix44.multiply(rot_y, car_pos)
         # * this will be repeated for drawing other elements with VAO
         # * bind the VAO to the vertex array
-        glBindVertexArray(VAO[0])
+        #glBindVertexArray(VAO[0])
         # * set the object texture
         #glBindTexture(GL_TEXTURE_2D, textures[0])
         # * set model matrix, with object position
-        glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
+        #glUniformMatrix4fv(model_loc, 1, GL_FALSE, model)
         # * Draw the object
-        glDrawArrays(GL_TRIANGLES, 0, len(car_indices))
+        #glDrawArrays(GL_TRIANGLES, 0, len(car_indices))
 
         #==================================================================
+        glUniformMatrix4fv(transform_loc, 1, GL_FALSE, rot_y)
         glUniformMatrix4fv(light_loc, 1, GL_FALSE, rot_y)
-        glDisable(GL_LIGHT0)
-        glDisable(GL_LIGHTING)
         #==================================================================
-
+        
         glBindVertexArray(VAO[1])
         glBindTexture(GL_TEXTURE_2D, textures[1])
         glUniformMatrix4fv(model_loc, 1, GL_FALSE, floor_pos)
@@ -252,19 +287,52 @@ try:
         glDrawArrays(GL_TRIANGLES, 0, len(floor_indices3))
 
         
-        glBindVertexArray(VAO[5])
+        glBindVertexArray(VAO[4])
         glBindTexture(GL_TEXTURE_2D, textures[5])
         glUniformMatrix4fv(model_loc, 1, GL_FALSE, sky_pos)
         glDrawArrays(GL_TRIANGLES, 0, len(sky_indices))
 
-        for i in range(20):
-            glBindVertexArray(VAO[4])
-            glBindTexture(GL_TEXTURE_2D, textures[4])
-            glUniformMatrix4fv(model_loc, 1, GL_FALSE, predio_pos[i])
-            glDrawArrays(GL_TRIANGLES, 0, len(predio_indices))
+        for j in range(3):
+            for i in range(8):
+                #Predios
+                glBindVertexArray(VAO[5])
+                glBindTexture(GL_TEXTURE_2D, textures[4])
+                glUniformMatrix4fv(model_loc, 1, GL_FALSE, predio_pos[i+j*8])
+                glDrawArrays(GL_TRIANGLES, 0, len(predio_indices))
 
+        for i in range(6):
+            #Muros
+            glBindVertexArray(VAO[6])
+            glBindTexture(GL_TEXTURE_2D, textures[6])
+            glUniformMatrix4fv(model_loc, 1, GL_FALSE, wall_pos[i])
+            glDrawArrays(GL_TRIANGLES, 0, len(wall_indices))
+
+        for i in range(5):
+            #Car1
+            glBindVertexArray(VAO[7])
+            glBindTexture(GL_TEXTURE_2D, textures[7])
+            glUniformMatrix4fv(model_loc, 1, GL_FALSE, car1_pos[i])
+            glDrawArrays(GL_TRIANGLES, 0, len(car1_indices))
+
+            #Car2
+            glBindVertexArray(VAO[8])
+            glBindTexture(GL_TEXTURE_2D, textures[8])
+            glUniformMatrix4fv(model_loc, 1, GL_FALSE, car2_pos[i])
+            glDrawArrays(GL_TRIANGLES, 0, len(car2_indices))
+
+        #obstacle
+        for i in range(3):
+            glBindVertexArray(VAO[9])
+            glBindTexture(GL_TEXTURE_2D, textures[9])
+            glUniformMatrix4fv(model_loc, 1, GL_FALSE, obstacle_pos[i])
+            glDrawArrays(GL_TRIANGLES, 0, len(obstacle_indices))
+
+        # glBindVertexArray(VAO[10])
+        # glBindTexture(GL_TEXTURE_2D, textures[10])
+        # glUniformMatrix4fv(model_loc, 1, GL_FALSE, engrenagem_pos)
+        # glDrawArrays(GL_TRIANGLES, 0, len(engrenagem_indices))
+        
         glfw.swap_buffers(window)
-
 
     # * free allocated resources
     glfw.terminate()

@@ -2,6 +2,7 @@ from math import sin, cos, radians
 import pyrr
 import time
 
+
 class Camera:
     def __init__(self):
         # * sets camera init
@@ -13,6 +14,7 @@ class Camera:
         self.mouse_sensitivity = 0.35
         self.jaw = -90
         self.pitch = 0
+        self.jump = -1
 
     def get_view_matrix(self):
         # * create look at function
@@ -58,14 +60,18 @@ class Camera:
         if direction == 'RIGHT':
             self.camera_pos[0] += self.camera_right[0] * velocity
             self.camera_pos[2] += self.camera_right[2] * velocity
-    
-    def process_jump(self, velocity):
-        if self.camera_pos[1] < self.camera_up[1] * 12:
-            self.camera_pos[1] += self.camera_up[1] * velocity
 
-    def process_back_jump(self, velocity):
-        if self.camera_pos[1] > self.camera_up[1] * 4:
-            self.camera_pos[1] -= self.camera_up[1] * velocity
+    def process_jump(self, velocity):
+        if self.jump == 1:
+            if self.camera_pos[1] >= self.camera_up[1] * 12:
+                self.jump = 0
+            else:
+                self.camera_pos[1] += self.camera_up[1] * velocity
+        elif self.jump == 0:
+            if self.camera_pos[1] <= self.camera_up[1] * 4:
+                self.jump = -1
+            else:
+                self.camera_pos[1] -= self.camera_up[1] * velocity
 
     def process_crouch(self, crouching):
         if crouching:

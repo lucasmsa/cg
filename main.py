@@ -163,7 +163,7 @@ try:
     floor_texture = textureLoader('textures/grass.jpg', textures[1])
     floor_texture2 = textureLoader('textures/asfalto.jpg', textures[2])
     floor_texture3 = textureLoader('textures/amarelo.jpg', textures[3])
-    predio_texture = textureLoader('textures/predio.jpg', textures[4])
+    predio_texture = textureLoader('textures/predio.png', textures[4])
     sky_texture = textureLoader('textures/skybox_texture.jpg', textures[5])
     wall_texture = textureLoader('textures/wall.jpg', textures[6])
     car1_texture = textureLoader('textures/car1.png', textures[7]) #other car

@@ -1,4 +1,4 @@
-# Parkour Game
+# 🏃 Parkour Game 
 Final project of Introduction to Computer Graphics Discipline - UFPB
 A simple game created using pyOpenGL only, the main objective was achieving a relatively decent character movement and displaying a simple scene<br>[Video](https://www.youtube.com/watch?v=OpuI_9XIUgo)
 # Installing Modules

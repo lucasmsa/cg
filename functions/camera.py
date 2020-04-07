@@ -32,11 +32,11 @@ class Camera:
         # * make the camera constrained to a determined angle [up and down]
         if constrain_pitch:
 
-            if self.pitch > 44:
-                self.pitch = 44
+            if self.pitch > 179:
+                self.pitch =179
             
-            if self.pitch < -44:
-                self.pitch = -44
+            if self.pitch < -179:
+                self.pitch = -179
         
         self.update_camera_vectors()
 
